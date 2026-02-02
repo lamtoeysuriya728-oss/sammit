@@ -1,44 +1,22 @@
 html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  overflow: hidden;
-  position: fixed;
+  margin: 0; padding: 0; width: 100%; height: 100%;
+  background: #000; overflow: hidden; position: fixed;
   font-family: 'Prompt', sans-serif;
 }
 
-.viewport {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-}
+.viewport { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
 
 .stage {
-  width: 2560px;
-  height: 1440px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  transform-origin: center;
+  width: 2560px; height: 1440px;
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%); transform-origin: center;
 }
 
-.bg {
-  width: 100%;
-  height: 100%;
-  background: url("bg.jpg") center / cover no-repeat;
-}
+.bg { width: 100%; height: 100%; background: url("bg.jpg") center / cover no-repeat; }
 
 .paper {
-  position: absolute;
-  width: 1800px;
-  height: 600px;
-  left: 50%;
-  top: 900px;
-  transform: translateX(-50%);
+  position: absolute; width: 1800px; height: 600px;
+  left: 50%; top: 900px; transform: translateX(-50%);
 }
 
 .label { position: absolute; font-size: 32px; font-weight: bold; color: #3b1f0c; }
@@ -48,14 +26,9 @@ html, body {
 .rank-label { left: 700px; top: 40px; }
 
 .field {
-  position: absolute;
-  padding: 15px 20px;
-  font-size: 30px;
-  background: #f3d9a4;
-  border: 4px solid #8b5a2b;
-  border-radius: 20px;
-  color: #3b1f0c;
-  outline: none;
+  position: absolute; padding: 15px 20px; font-size: 30px;
+  background: #f3d9a4; border: 4px solid #8b5a2b; border-radius: 20px;
+  color: #3b1f0c; outline: none; box-sizing: border-box;
 }
 
 .first-name { left: 80px; top: -45px; width: 480px; }
@@ -64,38 +37,30 @@ html, body {
 .rank       { left: 700px; top: 100px; width: 250px; }
 
 .dropdown-list {
-  display: none;
-  position: absolute;
-  top: 100%; left: 0; width: 100%;
-  background: #f3d9a4;
-  border: 4px solid #8b5a2b;
-  border-top: none;
-  border-radius: 0 0 20px 20px;
+  display: none; position: absolute; top: 100%; left: 0; width: 100%;
+  background: #f3d9a4; border: 4px solid #8b5a2b; border-radius: 0 0 20px 20px;
 }
 .dropdown.open .dropdown-list { display: block; }
 .dropdown-list div { padding: 15px 20px; border-bottom: 1px solid #8b5a2b; }
-.dropdown-list div:hover { background: #e6c584; }
 
-.photo-area { position: absolute; right: 80px; top: -110px; width: 520px; text-align: center; }
+.photo-area { position: absolute; right: 80px; top: -110px; width: 520px; }
 .photo-box {
   width: 520px; height: 380px; border: 5px solid #8b5a2b;
   border-radius: 30px; background: #f3d9a4; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
 }
 .photo-box img { width: 100%; height: 100%; object-fit: cover; display: none; }
-.photo-text { font-size: 28px; color: #8b5a2b; opacity: 0.6; }
+.photo-text { font-size: 26px; color: #8b5a2b; text-align: center; padding: 20px; }
 
 .upload-btn {
   width: 350px; height: 90px; margin: 20px auto;
-  background: url("btn-upload.png") center / contain no-repeat;
-  cursor: pointer;
+  background: url("btn-upload.png") center / contain no-repeat; cursor: pointer;
 }
 
 .submit-btn {
   position: absolute; bottom: 150px; left: 50%;
   transform: translateX(-50%); width: 480px; height: 130px;
-  background: url("btn-check.png") center / contain no-repeat;
-  cursor: pointer;
+  background: url("btn-check.png") center / contain no-repeat; cursor: pointer;
 }
 
 /* POPUP */
@@ -104,24 +69,22 @@ html, body {
   display: flex; align-items: center; justify-content: center; z-index: 9999;
 }
 .popup-paper {
-  width: 1300px; height: 650px;
-  background: url("A_digital_illustration_features_an_aged_parchment_.png") center / contain no-repeat;
+  width: 1200px; height: 600px;
+  background: url("A_digital_illustration_features_an_aged_parchment_.jpg") center / contain no-repeat;
   display: flex; align-items: center; justify-content: center;
 }
-.popup-content { width: 80%; text-align: center; font-size: 35px; color: #3b1f0c; line-height: 1.6; }
+.popup-content { width: 80%; text-align: center; font-size: 35px; color: #3b1f0c; }
 .popup-actions { margin-top: 40px; display: flex; gap: 30px; justify-content: center; }
-.popup-btn {
-  padding: 20px 60px; font-size: 30px; border-radius: 15px; border: none; cursor: pointer;
-}
-.btn-cancel { background: #d9534f; color: white; }
-.btn-confirm { background: #5cb85c; color: white; }
+.popup-btn { padding: 20px 60px; font-size: 30px; border: none; border-radius: 15px; cursor: pointer; }
+.btn-cancel { background: #d9534f; color: #fff; }
+.btn-confirm { background: #5cb85c; color: #fff; }
 
-/* LOADING */
+/* LOADING SCREEN */
 .loading-overlay {
   position: absolute; inset: 0; background: rgba(0,0,0,0.9);
   display: flex; align-items: center; justify-content: center; z-index: 10001;
-  color: #f3d9a4; font-size: 45px;
 }
+.loader-content { color: #f3d9a4; font-size: 45px; text-align: center; }
 .compass-loader {
   width: 180px; height: 180px; border: 10px double #8b5a2b;
   border-radius: 50%; border-top-color: #f3d9a4;
