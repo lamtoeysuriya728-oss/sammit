@@ -1,4 +1,4 @@
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzCejigFaH-07Fmk_FWrSYwMmDpVviVFGHVjcywMZSNr0mFPj8KfleRCpN_OK1m6BfMLw/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxvpZphGelq1_JCgVlqJ4qjvzFGiB3JlnZLluURcgVozxED9DUEUKrqTuCEClnGzK3X0g/exec";
 
 // ระบบ Scale สำหรับ iPad/คอม
 function resize() {
@@ -97,3 +97,4 @@ document.getElementById("submitBtn").onclick = () => {
 };
 
 document.getElementById("popupCancel").onclick = () => document.getElementById("popup").classList.add("hidden");
+
