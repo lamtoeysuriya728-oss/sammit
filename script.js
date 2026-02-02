@@ -24,9 +24,9 @@ fileInput.onchange = (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
+  // รับรูปได้สูงสุด 10MB
   if (file.size > 10 * 1024 * 1024) {
-    alert("⚠️ ขนาดไฟล์ใหญ่เกิน 10MB กรุณาเลือกรูปใหม่");
-    fileInput.value = "";
+    alert("⚠️ รูปภาพมีขนาดใหญ่เกิน 10MB");
     return;
   }
 
@@ -34,24 +34,25 @@ fileInput.onchange = (e) => {
   reader.onload = (event) => {
     const img = new Image();
     img.onload = () => {
-      // สร้าง Canvas เพื่อ Resize รูปภาพสำหรับแสดงผล (ลดภาระ RAM ของ iPad)
+      // ใช้ Canvas ย่อขนาดหน้าแสดงผลเพื่อให้ iPad ไม่ RAM เต็ม
       const canvas = document.createElement('canvas');
+      const max_preview = 1000;
       let width = img.width;
       let height = img.height;
-      const max_size = 1200; // บีบอัดหน้าแสดงผลให้ลื่นไหล
 
       if (width > height) {
-        if (width > max_size) { height *= max_size / width; width = max_size; }
+        if (width > max_preview) { height *= max_preview / width; width = max_preview; }
       } else {
-        if (height > max_size) { width *= max_size / height; height = max_size; }
+        if (height > max_preview) { width *= max_preview / height; height = max_preview; }
       }
 
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, width, height);
-      
-      previewImg.src = canvas.toDataURL('image/jpeg', 0.85); // แปลงเป็น JPG
+
+      // แสดงผลรูป
+      previewImg.src = canvas.toDataURL('image/jpeg', 0.8);
       previewImg.style.display = "block";
       photoText.style.display = "none";
     };
@@ -130,3 +131,4 @@ submitBtn.onclick = () => {
 };
 
 document.getElementById("popupCancel").onclick = () => popup.classList.add("hidden");
+
