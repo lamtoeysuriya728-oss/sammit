@@ -1,9 +1,10 @@
 // 1. ใส่ URL จากการ Deploy Google Apps Script ที่นี่
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxrtx851Iwh_FkWEBERkTV1_A6Uyhtp9iv1WBCUskdj5pqVt46KFlyREkSzdMeG0k6sCA/exec";
+const GAS_URL = "ใส่_WEB_APP_URL_ที่นี่";
 
 // 2. ระบบปรับขนาด (Responsive)
 function resizeStage() {
   const stage = document.querySelector(".stage");
+  if(!stage) return;
   const scale = Math.min(window.innerWidth / 2560, window.innerHeight / 1440);
   stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
 }
@@ -11,7 +12,7 @@ window.addEventListener("resize", resizeStage);
 window.addEventListener("load", resizeStage);
 resizeStage();
 
-// 3. จัดการรูปภาพ (จำกัด 10MB)
+// 3. จัดการรูปภาพ (รองรับ iPad และจำกัด 10MB)
 const fileInput = document.getElementById("fileInput");
 const previewImg = document.getElementById("previewImg");
 const photoText = document.querySelector(".photo-text");
@@ -22,16 +23,33 @@ uploadBtn.onclick = () => fileInput.click();
 fileInput.onchange = (e) => {
   const file = e.target.files[0];
   if (file) {
-    if (file.size > 10 * 1024 * 1024) { // เช็ค 10MB
+    // เช็คขนาดไฟล์ (10MB)
+    if (file.size > 10 * 1024 * 1024) {
       alert("⚠️ ขนาดไฟล์ใหญ่เกิน 10MB กรุณาเลือกรูปใหม่");
       fileInput.value = "";
       return;
     }
+
     const reader = new FileReader();
     reader.onload = (ev) => {
-      previewImg.src = ev.target.result;
-      previewImg.style.display = "block";
-      photoText.style.display = "none";
+      const img = new Image();
+      img.onload = () => {
+        // สร้าง Canvas เพื่อย่อขนาดรูปให้พอดีกับหน้าจอ Preview (ช่วยให้ iPad ไม่ค้าง)
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 1200; // ปรับความกว้างให้พอดี
+        const scale = MAX_WIDTH / img.width;
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * scale;
+        
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        
+        // แสดงผลรูปที่ย่อแล้ว
+        previewImg.src = canvas.toDataURL('image/jpeg', 0.8);
+        previewImg.style.display = "block";
+        photoText.style.display = "none";
+      };
+      img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
   }
@@ -109,3 +127,4 @@ submitBtn.onclick = () => {
 };
 
 document.getElementById("popupCancel").onclick = () => popup.classList.add("hidden");
+
