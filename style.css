@@ -56,27 +56,69 @@ html, body {
   background: url("btn-check.png") center / contain no-repeat; cursor: pointer;
 }
 
-/* POPUP FIXED */
-.popup { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-.popup-paper {
-  width: 1200px; height: 600px;
-  background: url("pop.jpg") center / contain no-repeat; /* เปลี่ยนชื่อไฟล์เป็น pop.jpg */
-  display: flex; align-items: center; justify-content: center;
+/* --- ส่วน POPUP ทั้งหมด --- */
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85); /* พื้นหลังดำจางๆ รอบนอก */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
-.popup-content { width: 80%; text-align: center; font-size: 35px; color: #3b1f0c; }
-.popup-actions { margin-top: 40px; display: flex; gap: 30px; justify-content: center; }
-.popup-btn { padding: 20px 60px; font-size: 30px; border: none; border-radius: 15px; cursor: pointer; }
-.btn-cancel { background: #d9534f; color: #fff; }
-.btn-confirm { background: #5cb85c; color: #fff; }
 
-.loading-overlay {
-  position: absolute; inset: 0; background: rgba(0,0,0,0.9);
-  display: flex; align-items: center; justify-content: center; z-index: 10001;
+.popup-paper {
+  width: 1200px; /* ขนาดแผ่นกระดาษ */
+  height: 600px;
+  background: url("pop.jpg") center / contain no-repeat; /* บังคับใช้ภาพ pop.jpg */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
-.compass-loader {
-  width: 150px; height: 150px; border: 10px double #8b5a2b;
-  border-radius: 50%; border-top-color: #f3d9a4;
-  animation: spin 1s linear infinite; margin-bottom: 20px;
+
+.popup-content {
+  width: 80%;
+  text-align: center;
+  color: #3b1f0c; /* สีน้ำตาลเข้มแบบโจรสลัด */
+  font-size: 38px;
+  font-weight: bold;
+  line-height: 1.5;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
-.hidden { display: none !important; }
+
+.popup-actions {
+  margin-top: 40px;
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+}
+
+.popup-btn {
+  padding: 15px 50px;
+  font-size: 32px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+.popup-btn:active {
+  transform: scale(0.9); /* เอฟเฟกต์ตอนกด */
+}
+
+.btn-cancel {
+  background: #d9534f;
+  color: white;
+  box-shadow: 0 5px 0 #a94442;
+}
+
+.btn-confirm {
+  background: #5cb85c;
+  color: white;
+  box-shadow: 0 5px 0 #419141;
+}
+
+.hidden { display: none !important; }}
+
