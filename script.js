@@ -79,7 +79,7 @@ document.getElementById("submitBtn").onclick = () => {
   const r = document.getElementById("rankInput").value.trim();
 
   if (!f || !l || p === "เลือกตำแหน่ง" || !r || !previewImg.src) {
-    showPopup("⚓ กรุณากรอกข้อมูลให้ครบ<br>และเลือกรูปก่อนออกเรือครับ!", "alert");
+    showPopup("⚓ กรุณากรอกข้อมูลให้ครบ<br>และเลือกรูปก่อนครับ!", "alert");
     return;
   }
 
@@ -93,7 +93,7 @@ document.getElementById("submitBtn").onclick = () => {
       body: JSON.stringify({ firstName: f, lastName: l, position: p, rank: r, imageBase64: previewImg.src })
     }).then(() => {
       document.getElementById("loadingOverlay").classList.add("hidden");
-      showPopup("✅ บันทึกสมบัติสำเร็จ!<br>ข้อมูลถูกเก็บเข้าคลังแล้ว", "alert");
+      showPopup("✅ บันทึกรูปภาพสำเร็จ!<br>ถูกเก็บเข้าคลังสมบัติเรียบร้อยแล้ว", "alert");
       btnConfirm.onclick = () => location.reload();
     }).catch(() => {
       document.getElementById("loadingOverlay").classList.add("hidden");
@@ -103,3 +103,4 @@ document.getElementById("submitBtn").onclick = () => {
 };
 
 btnCancel.onclick = () => popup.classList.add("hidden");
+
