@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ส่งรูปผู้ได้รับรางวัล - Summit Club Pirate Code</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="viewport">
+  <div class="stage">
+    <div class="bg"></div>
+
+    <div class="paper">
+      <div class="label name-label">ชื่อ</div>
+      <input class="field first-name" id="firstName" placeholder="กรอกชื่อ" autocomplete="off">
+
+      <div class="label lastname-label">นามสกุล</div>
+      <input class="field last-name" id="lastName" placeholder="กรอกนามสกุล" autocomplete="off">
+
+      <div class="label position-label">ตำแหน่งรับรางวัล</div>
+      <div class="dropdown field position" id="positionDropdown">
+        <div class="selected" id="positionSelected">เลือกตำแหน่ง</div>
+        <div class="dropdown-list">
+          <div>ผู้จัดการฝ่าย</div>
+          <div>ผู้จัดการภาค</div>
+          <div>ผู้บริหารศูนย์</div>
+          <div>หน่วย MBRT</div>
+        </div>
+      </div>
+
+      <div class="label rank-label">อันดับที่</div>
+      <input class="field rank" id="rankInput" placeholder="กรอกอันดับ" type="number" autocomplete="off">
+
+      <div class="photo-area">
+        <div class="photo-box">
+          <span class="photo-text">ยังไม่ได้เลือกรูปภาพ</span>
+          <img id="previewImg" alt="ตัวอย่างรูปภาพ">
+        </div>
+        <input type="file" id="fileInput" accept="image/*" hidden>
+        <div class="upload-btn" id="uploadBtn"></div>
+      </div>
+    </div>
+
+    <div class="submit-btn" id="submitBtn"></div>
+
+    <div id="loadingOverlay" class="loading-overlay hidden">
+      <div class="loader-content">
+        <div class="compass-loader"></div>
+        <p>กำลังส่งรูปภาพไปยังคลังโจรสลัด...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="popup hidden" id="popup">
+  <div class="popup-paper">
+    <div class="popup-content">
+      <div id="popupMessage"></div>
+      <div class="popup-actions">
+        <button class="popup-btn btn-cancel" id="popupCancel">แก้ไข</button>
+        <button class="popup-btn btn-confirm" id="popupConfirm">ตกลง</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
