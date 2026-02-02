@@ -1,134 +1,99 @@
-// 1. ใส่ URL จากการ Deploy ของคุณ
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxrtx851Iwh_FkWEBERkTV1_A6Uyhtp9iv1WBCUskdj5pqVt46KFlyREkSzdMeG0k6sCA/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzCejigFaH-07Fmk_FWrSYwMmDpVviVFGHVjcywMZSNr0mFPj8KfleRCpN_OK1m6BfMLw/exec";
 
-// 2. ระบบ Responsive
-function resizeStage() {
+// ระบบ Scale สำหรับ iPad/คอม
+function resize() {
   const stage = document.querySelector(".stage");
-  if(!stage) return;
-  const scale = Math.min(window.innerWidth / 2560, window.innerHeight / 1440);
-  stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
+  const s = Math.min(window.innerWidth / 2560, window.innerHeight / 1440);
+  stage.style.transform = `translate(-50%, -50%) scale(${s})`;
 }
-window.addEventListener("resize", resizeStage);
-window.addEventListener("load", resizeStage);
-resizeStage();
+window.onresize = resize;
+window.onload = resize;
+resize();
 
-// 3. จัดการรูปภาพ (iOS/iPad Stable Version)
+// เลือกรูปภาพ
 const fileInput = document.getElementById("fileInput");
 const previewImg = document.getElementById("previewImg");
-const photoText = document.querySelector(".photo-text");
-const uploadBtn = document.getElementById("uploadBtn");
+const photoStatus = document.getElementById("photoStatus");
 
-uploadBtn.onclick = () => fileInput.click();
+document.getElementById("uploadBtn").onclick = () => fileInput.click();
 
-fileInput.onchange = (e) => {
-  const file = e.target.files[0];
+fileInput.onchange = () => {
+  const file = fileInput.files[0];
   if (!file) return;
 
-  // รับรูปได้สูงสุด 10MB
   if (file.size > 10 * 1024 * 1024) {
-    alert("⚠️ รูปภาพมีขนาดใหญ่เกิน 10MB");
+    alert("ไฟล์ใหญ่เกิน 10MB!");
     return;
   }
 
+  photoStatus.innerText = "กำลังประมวลผลรูปภาพ...";
+  
   const reader = new FileReader();
-  reader.onload = (event) => {
+  reader.onload = (e) => {
     const img = new Image();
     img.onload = () => {
-      // ใช้ Canvas ย่อขนาดหน้าแสดงผลเพื่อให้ iPad ไม่ RAM เต็ม
-      const canvas = document.createElement('canvas');
-      const max_preview = 1000;
-      let width = img.width;
-      let height = img.height;
+      // สร้าง Canvas เพื่อบังคับให้ iPad แสดงผลรูป (แก้ปัญหาเลือกรูปแล้วไม่ขึ้น)
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const max = 1200;
+      let w = img.width;
+      let h = img.height;
 
-      if (width > height) {
-        if (width > max_preview) { height *= max_preview / width; width = max_preview; }
-      } else {
-        if (height > max_preview) { width *= max_preview / height; height = max_preview; }
-      }
+      if (w > h) { if (w > max) { h *= max / w; w = max; } }
+      else { if (h > max) { w *= max / h; h = max; } }
 
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-
-      // แสดงผลรูป
-      previewImg.src = canvas.toDataURL('image/jpeg', 0.8);
+      canvas.width = w;
+      canvas.height = h;
+      ctx.drawImage(img, 0, 0, w, h);
+      
+      previewImg.src = canvas.toDataURL("image/jpeg", 0.8);
       previewImg.style.display = "block";
-      photoText.style.display = "none";
+      photoStatus.style.display = "none";
     };
-    img.src = event.target.result;
+    img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 };
 
-// 4. Dropdown
-const positionDropdown = document.getElementById("positionDropdown");
-const positionSelected = document.getElementById("positionSelected");
-
-positionSelected.onclick = (e) => {
-  e.stopPropagation();
-  positionDropdown.classList.toggle("open");
-};
-
-positionDropdown.querySelectorAll(".dropdown-list div").forEach(item => {
-  item.onclick = () => {
-    positionSelected.textContent = item.textContent;
-    positionDropdown.classList.remove("open");
-  };
+// Dropdown
+const posBox = document.getElementById("positionDropdown");
+const posSel = document.getElementById("positionSelected");
+posSel.onclick = (e) => { e.stopPropagation(); posBox.classList.toggle("open"); };
+posBox.querySelectorAll(".dropdown-list div").forEach(d => {
+  d.onclick = () => { posSel.innerText = d.innerText; posBox.classList.remove("open"); };
 });
-document.addEventListener("click", () => positionDropdown.classList.remove("open"));
 
-// 5. ส่งข้อมูล
-const submitBtn = document.getElementById("submitBtn");
-const popup = document.getElementById("popup");
-const loadingOverlay = document.getElementById("loadingOverlay");
+// ส่งข้อมูล
+document.getElementById("submitBtn").onclick = () => {
+  const f = document.getElementById("firstName").value;
+  const l = document.getElementById("lastName").value;
+  const p = posSel.innerText;
+  const r = document.getElementById("rankInput").value;
 
-submitBtn.onclick = () => {
-  const fName = document.getElementById("firstName").value.trim();
-  const lName = document.getElementById("lastName").value.trim();
-  const pos = positionSelected.textContent;
-  const rank = document.getElementById("rankInput").value.trim();
-
-  if (!fName || !lName || pos === "เลือกตำแหน่ง" || !rank || !previewImg.src) {
-    alert("❌ กรุณากรอกข้อมูลให้ครบถ้วนและเลือกรูปภาพ");
+  if (!f || !l || p === "เลือกตำแหน่ง" || !r || !previewImg.src) {
+    alert("กรอกข้อมูลให้ครบและเลือกรูปก่อนครับ!");
     return;
   }
 
-  document.getElementById("popupMessage").innerHTML = `
-    <b>ตรวจสอบข้อมูลก่อนออกเรือ</b><br>
-    คุณ ${fName} ${lName}<br>
-    ตำแหน่ง: ${pos} | อันดับ: ${rank}
-  `;
-  popup.classList.remove("hidden");
+  document.getElementById("popupMessage").innerHTML = `ยืนยันข้อมูล<br>${f} ${l}<br>ตำแหน่ง: ${p}<br>อันดับ: ${r}`;
+  document.getElementById("popup").classList.remove("hidden");
 
   document.getElementById("popupConfirm").onclick = () => {
-    popup.classList.add("hidden");
-    loadingOverlay.classList.remove("hidden");
-
-    const data = {
-      firstName: fName,
-      lastName: lName,
-      position: pos,
-      rank: rank,
-      imageBase64: previewImg.src
-    };
+    document.getElementById("popup").classList.add("hidden");
+    document.getElementById("loadingOverlay").classList.remove("hidden");
 
     fetch(GAS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify(data)
-    })
-    .then(() => {
-      loadingOverlay.classList.add("hidden");
-      alert("✅ บันทึกสมบัติสำเร็จ!");
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify({ firstName: f, lastName: l, position: p, rank: r, imageBase64: previewImg.src })
+    }).then(() => {
+      alert("บันทึกสำเร็จ!");
       location.reload();
-    })
-    .catch(() => {
-      loadingOverlay.classList.add("hidden");
-      alert("❌ เกิดข้อผิดพลาด กรุณาลองใหม่");
+    }).catch(() => {
+      alert("เกิดข้อผิดพลาด!");
+      document.getElementById("loadingOverlay").classList.add("hidden");
     });
   };
 };
 
-document.getElementById("popupCancel").onclick = () => popup.classList.add("hidden");
-
+document.getElementById("popupCancel").onclick = () => document.getElementById("popup").classList.add("hidden");
