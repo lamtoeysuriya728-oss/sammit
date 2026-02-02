@@ -1,7 +1,7 @@
 html, body {
   margin: 0; padding: 0; width: 100%; height: 100%;
   background: #000; overflow: hidden; position: fixed;
-  font-family: 'Prompt', sans-serif;
+  font-family: sans-serif;
 }
 .viewport { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
 .stage {
@@ -43,8 +43,8 @@ html, body {
   border-radius: 30px; background: #f3d9a4; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
 }
-.photo-box img { width: 100%; height: 100%; object-fit: contain; display: none; background: #000; }
-.photo-text { font-size: 26px; color: #8b5a2b; text-align: center; padding: 20px; }
+#previewImg { width: 100%; height: 100%; object-fit: contain; display: none; }
+.photo-text { font-size: 26px; color: #8b5a2b; text-align: center; }
 
 .upload-btn {
   width: 350px; height: 90px; margin: 20px auto;
@@ -55,26 +55,17 @@ html, body {
   transform: translateX(-50%); width: 480px; height: 130px;
   background: url("btn-check.png") center / contain no-repeat; cursor: pointer;
 }
+
+/* POPUP FIXED */
 .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 9999; }
 .popup-paper {
-  width: 1200px; 
-  height: 600px;
-  background: url("A_digital_illustration_features_an_aged_parchment_.jpg") center / contain no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  background-color: transparent;
-.photo-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; 
-  display: none;
-  -webkit-user-drag: none; 
+  width: 1200px; height: 600px;
+  background: url("pop.jpg") center / contain no-repeat; /* เปลี่ยนชื่อไฟล์เป็น pop.jpg */
+  display: flex; align-items: center; justify-content: center;
 }
-.popup-content { width: 85%; text-align: center; font-size: 35px; color: #3b1f0c; }
+.popup-content { width: 80%; text-align: center; font-size: 35px; color: #3b1f0c; }
 .popup-actions { margin-top: 40px; display: flex; gap: 30px; justify-content: center; }
-.popup-btn { padding: 20px 60px; font-size: 30px; border: none; border-radius: 15px; cursor: pointer; font-family: 'Prompt'; }
+.popup-btn { padding: 20px 60px; font-size: 30px; border: none; border-radius: 15px; cursor: pointer; }
 .btn-cancel { background: #d9534f; color: #fff; }
 .btn-confirm { background: #5cb85c; color: #fff; }
 
@@ -82,12 +73,10 @@ html, body {
   position: absolute; inset: 0; background: rgba(0,0,0,0.9);
   display: flex; align-items: center; justify-content: center; z-index: 10001;
 }
-.loader-content { color: #f3d9a4; font-size: 45px; text-align: center; font-family: 'Prompt'; }
 .compass-loader {
-  width: 180px; height: 180px; border: 10px double #8b5a2b;
+  width: 150px; height: 150px; border: 10px double #8b5a2b;
   border-radius: 50%; border-top-color: #f3d9a4;
-  animation: spin 1.5s linear infinite; margin: 0 auto 30px;
+  animation: spin 1s linear infinite; margin-bottom: 20px;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .hidden { display: none !important; }
-
