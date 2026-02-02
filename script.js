@@ -1,7 +1,7 @@
-// 1. ใส่ URL จากการ Deploy Google Apps Script ที่นี่
+// 1. ใส่ URL จากการ Deploy ของคุณ
 const GAS_URL = "https://script.google.com/macros/s/AKfycbxrtx851Iwh_FkWEBERkTV1_A6Uyhtp9iv1WBCUskdj5pqVt46KFlyREkSzdMeG0k6sCA/exec";
 
-// 2. ระบบปรับขนาด (Responsive)
+// 2. ระบบ Responsive
 function resizeStage() {
   const stage = document.querySelector(".stage");
   if(!stage) return;
@@ -12,7 +12,7 @@ window.addEventListener("resize", resizeStage);
 window.addEventListener("load", resizeStage);
 resizeStage();
 
-// 3. จัดการรูปภาพ (รองรับ iPad และจำกัด 10MB)
+// 3. จัดการรูปภาพ (iOS/iPad Stable Version)
 const fileInput = document.getElementById("fileInput");
 const previewImg = document.getElementById("previewImg");
 const photoText = document.querySelector(".photo-text");
@@ -22,37 +22,42 @@ uploadBtn.onclick = () => fileInput.click();
 
 fileInput.onchange = (e) => {
   const file = e.target.files[0];
-  if (file) {
-    // เช็คขนาดไฟล์ (10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      alert("⚠️ ขนาดไฟล์ใหญ่เกิน 10MB กรุณาเลือกรูปใหม่");
-      fileInput.value = "";
-      return;
-    }
+  if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const img = new Image();
-      img.onload = () => {
-        // สร้าง Canvas เพื่อย่อขนาดรูปให้พอดีกับหน้าจอ Preview (ช่วยให้ iPad ไม่ค้าง)
-        const canvas = document.createElement('canvas');
-        const MAX_WIDTH = 1200; // ปรับความกว้างให้พอดี
-        const scale = MAX_WIDTH / img.width;
-        canvas.width = MAX_WIDTH;
-        canvas.height = img.height * scale;
-        
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        
-        // แสดงผลรูปที่ย่อแล้ว
-        previewImg.src = canvas.toDataURL('image/jpeg', 0.8);
-        previewImg.style.display = "block";
-        photoText.style.display = "none";
-      };
-      img.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
+  if (file.size > 10 * 1024 * 1024) {
+    alert("⚠️ ขนาดไฟล์ใหญ่เกิน 10MB กรุณาเลือกรูปใหม่");
+    fileInput.value = "";
+    return;
   }
+
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const img = new Image();
+    img.onload = () => {
+      // สร้าง Canvas เพื่อ Resize รูปภาพสำหรับแสดงผล (ลดภาระ RAM ของ iPad)
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+      const max_size = 1200; // บีบอัดหน้าแสดงผลให้ลื่นไหล
+
+      if (width > height) {
+        if (width > max_size) { height *= max_size / width; width = max_size; }
+      } else {
+        if (height > max_size) { width *= max_size / height; height = max_size; }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      previewImg.src = canvas.toDataURL('image/jpeg', 0.85); // แปลงเป็น JPG
+      previewImg.style.display = "block";
+      photoText.style.display = "none";
+    };
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(file);
 };
 
 // 4. Dropdown
@@ -70,7 +75,6 @@ positionDropdown.querySelectorAll(".dropdown-list div").forEach(item => {
     positionDropdown.classList.remove("open");
   };
 });
-
 document.addEventListener("click", () => positionDropdown.classList.remove("open"));
 
 // 5. ส่งข้อมูล
@@ -90,10 +94,9 @@ submitBtn.onclick = () => {
   }
 
   document.getElementById("popupMessage").innerHTML = `
-    <b>ตรวจสอบข้อมูล</b><br>
-    ${fName} ${lName}<br>
-    ตำแหน่ง: ${pos}<br>
-    อันดับ: ${rank}
+    <b>ตรวจสอบข้อมูลก่อนออกเรือ</b><br>
+    คุณ ${fName} ${lName}<br>
+    ตำแหน่ง: ${pos} | อันดับ: ${rank}
   `;
   popup.classList.remove("hidden");
 
@@ -116,7 +119,7 @@ submitBtn.onclick = () => {
     })
     .then(() => {
       loadingOverlay.classList.add("hidden");
-      alert("✅ บันทึกข้อมูลสำเร็จ!");
+      alert("✅ บันทึกสมบัติสำเร็จ!");
       location.reload();
     })
     .catch(() => {
@@ -127,5 +130,3 @@ submitBtn.onclick = () => {
 };
 
 document.getElementById("popupCancel").onclick = () => popup.classList.add("hidden");
-
-
