@@ -1,5 +1,5 @@
 // 1. ใส่ URL จากการ Deploy Google Apps Script ที่นี่
-const GAS_URL = "ใส่_WEB_APP_URL_ที่นี่";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxrtx851Iwh_FkWEBERkTV1_A6Uyhtp9iv1WBCUskdj5pqVt46KFlyREkSzdMeG0k6sCA/exec";
 
 // 2. ระบบปรับขนาด (Responsive)
 function resizeStage() {
@@ -127,4 +127,5 @@ submitBtn.onclick = () => {
 };
 
 document.getElementById("popupCancel").onclick = () => popup.classList.add("hidden");
+
 
