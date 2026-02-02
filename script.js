@@ -1,36 +1,30 @@
-// เปลี่ยน URL นี้เป็น Web App URL ของคุณที่ได้จาก Google Apps Script
+// 1. ใส่ URL จากการ Deploy Google Apps Script ที่นี่
 const GAS_URL = "https://script.google.com/macros/s/AKfycbxrtx851Iwh_FkWEBERkTV1_A6Uyhtp9iv1WBCUskdj5pqVt46KFlyREkSzdMeG0k6sCA/exec";
 
-// 1. SCALE SYSTEM
+// 2. ระบบปรับขนาด (Responsive)
 function resizeStage() {
   const stage = document.querySelector(".stage");
-  const scaleX = window.innerWidth / 2560;
-  const scaleY = window.innerHeight / 1440;
-  const scale = Math.min(scaleX, scaleY);
+  const scale = Math.min(window.innerWidth / 2560, window.innerHeight / 1440);
   stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
 }
 window.addEventListener("resize", resizeStage);
 window.addEventListener("load", resizeStage);
 resizeStage();
 
-// 2. DOM ELEMENTS
+// 3. จัดการรูปภาพ (จำกัด 10MB)
 const fileInput = document.getElementById("fileInput");
 const previewImg = document.getElementById("previewImg");
 const photoText = document.querySelector(".photo-text");
 const uploadBtn = document.getElementById("uploadBtn");
-const submitBtn = document.getElementById("submitBtn");
-const loadingOverlay = document.getElementById("loadingOverlay");
-const positionDropdown = document.getElementById("positionDropdown");
-const positionSelected = document.getElementById("positionSelected");
-const popup = document.getElementById("popup");
 
-// 3. IMAGE PREVIEW
 uploadBtn.onclick = () => fileInput.click();
+
 fileInput.onchange = (e) => {
   const file = e.target.files[0];
   if (file) {
-    if (file.size > 2 * 1024 * 1024) {
-      alert("รูปภาพใหญ่เกินไป (จำกัดไม่เกิน 2MB)");
+    if (file.size > 10 * 1024 * 1024) { // เช็ค 10MB
+      alert("⚠️ ขนาดไฟล์ใหญ่เกิน 10MB กรุณาเลือกรูปใหม่");
+      fileInput.value = "";
       return;
     }
     const reader = new FileReader();
@@ -43,20 +37,29 @@ fileInput.onchange = (e) => {
   }
 };
 
-// 4. DROPDOWN
+// 4. Dropdown
+const positionDropdown = document.getElementById("positionDropdown");
+const positionSelected = document.getElementById("positionSelected");
+
 positionSelected.onclick = (e) => {
   e.stopPropagation();
   positionDropdown.classList.toggle("open");
 };
+
 positionDropdown.querySelectorAll(".dropdown-list div").forEach(item => {
   item.onclick = () => {
     positionSelected.textContent = item.textContent;
     positionDropdown.classList.remove("open");
   };
 });
+
 document.addEventListener("click", () => positionDropdown.classList.remove("open"));
 
-// 5. SUBMIT LOGIC
+// 5. ส่งข้อมูล
+const submitBtn = document.getElementById("submitBtn");
+const popup = document.getElementById("popup");
+const loadingOverlay = document.getElementById("loadingOverlay");
+
 submitBtn.onclick = () => {
   const fName = document.getElementById("firstName").value.trim();
   const lName = document.getElementById("lastName").value.trim();
@@ -64,14 +67,15 @@ submitBtn.onclick = () => {
   const rank = document.getElementById("rankInput").value.trim();
 
   if (!fName || !lName || pos === "เลือกตำแหน่ง" || !rank || !previewImg.src) {
-    alert("กรุณากรอกข้อมูลและเลือกรูปภาพให้ครบถ้วนก่อนส่ง");
+    alert("❌ กรุณากรอกข้อมูลให้ครบถ้วนและเลือกรูปภาพ");
     return;
   }
 
   document.getElementById("popupMessage").innerHTML = `
-    <b>ยืนยันข้อมูลโจรสลัด</b><br>
-    คุณ ${fName} ${lName}<br>
-    ตำแหน่ง: ${pos} | อันดับ: ${rank}
+    <b>ตรวจสอบข้อมูล</b><br>
+    ${fName} ${lName}<br>
+    ตำแหน่ง: ${pos}<br>
+    อันดับ: ${rank}
   `;
   popup.classList.remove("hidden");
 
@@ -94,7 +98,7 @@ submitBtn.onclick = () => {
     })
     .then(() => {
       loadingOverlay.classList.add("hidden");
-      alert("🎉 สำเร็จ! ข้อมูลและรูปภาพถูกเก็บเข้าคลังแล้ว");
+      alert("✅ บันทึกข้อมูลสำเร็จ!");
       location.reload();
     })
     .catch(() => {
