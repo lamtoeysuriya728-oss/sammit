@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Summit Club Pirate Code</title>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap" rel="stylesheet">
+  <title>Summit Club - Pirate Upload</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,7 +11,6 @@
 <div class="viewport">
   <div class="stage">
     <div class="bg"></div>
-
     <div class="paper">
       <div class="label name-label">ชื่อ</div>
       <input class="field first-name" id="firstName" placeholder="กรอกชื่อ" autocomplete="off">
@@ -36,8 +34,8 @@
 
       <div class="photo-area">
         <div class="photo-box">
-          <span class="photo-text">แตะที่ปุ่มด้านล่างเพื่อเลือกรูป<br>(รองรับสูงสุด 10MB)</span>
-          <img id="previewImg" alt="Preview">
+          <span id="photoStatus" class="photo-text">แตะเลือกรูปภาพ<br>(ไม่เกิน 10MB)</span>
+          <img id="previewImg">
         </div>
         <input type="file" id="fileInput" accept="image/*" hidden>
         <div class="upload-btn" id="uploadBtn"></div>
@@ -70,3 +68,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
